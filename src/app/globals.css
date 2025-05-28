@@ -125,3 +125,12 @@
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Safari and Chrome */
 }
+
+.jodit-react-container{
+  height: 12.5rem;
+  width: 17rem;
+  @media screen and (min-width:1024px) {
+    width: 28.5rem;
+  }
+  overflow-y: auto;
+}
