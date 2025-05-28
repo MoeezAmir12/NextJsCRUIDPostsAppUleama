@@ -29,7 +29,7 @@ const DataTablePosts = ({ postData, setPopupModalValues }: {
             action,
             selectedPostsData: post
         })
-    }, [])
+    }, [setPopupModalValues])
     return (
         <div className="w-full overflow-x-auto rounded-md border h-full p-2 overflow-y-auto scrollbar-hide border-gray-300 dark:border-gray-600 bg-slate-400 dark:bg-slate-700">
             <Table>
@@ -39,13 +39,13 @@ const DataTablePosts = ({ postData, setPopupModalValues }: {
                         <TableHead>Post ID</TableHead>
                         <TableHead className="w-[100px]">Title</TableHead>
                         <TableHead className="w-[100px]">Body</TableHead>
-                        <TableHead className="text-left w-[3rem]">Actions</TableHead>
+                        <TableHead className="text-center w-[3rem]">Actions</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {postData?.map(post => {
                         return (
-                            <TableRow className="h-[3rem]">
+                            <TableRow key={post?.id} className="h-[3rem]">
                                 <TableCell className="font-medium truncate max-w-[100px]">{post?.id}</TableCell>
                                 <TableCell className="font-medium truncate max-w-[1000px]">{post?.title}</TableCell>
                                 <TableCell className="truncate max-w-[1100px]">{post?.body}</TableCell>

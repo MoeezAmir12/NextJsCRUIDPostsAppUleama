@@ -45,8 +45,8 @@ export const updatePost = (payload: IPost) => {
     return postData;
 }
 
-export const deletePost = (payload: IPost) => {
-    const postData = fetch(`${JsonPlaceHolderAPIEnum?.baseURL}${JsonPlaceHolderAPIEnum?.posts}/${payload?.id}`,{
+export const deletePost = (postID: number) => {
+    const postData = fetch(`${JsonPlaceHolderAPIEnum?.baseURL}${JsonPlaceHolderAPIEnum?.posts}/${postID}`,{
         method: 'DELETE'
     }).then(response => response?.json()).catch(error => {
         throw new Error(error?.message);

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/Components/Navbar/Navbar";
 import ReactQueryProvider from "@/Components/ReactQueryProvider";
@@ -17,7 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`h-screen w-screen bg-slate-200 dark:bg-[#151d35]`}
+        className={`h-[100dvh] w-[100dvw] bg-slate-200 dark:bg-[#151d35]`}
       >
         <ReactQueryProvider>
           <div className="w-full h-full p-2 flex flex-col gap-2">

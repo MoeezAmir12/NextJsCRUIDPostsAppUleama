@@ -2,50 +2,49 @@
 
 
 import { Button } from "@/Components/ui/button"
-import { DeleteIcon, Loader2, Trash2Icon } from "lucide-react"
+import { Loader2, Trash2Icon } from "lucide-react"
 import {
     Dialog,
     DialogClose,
     DialogContent,
-    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@/Components/ui/dialog"
 import { IPost } from "@/interfaces";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { deletePost } from "@/Reducers/postsAPIReducer";
 
-export default function DeleteConfirmationModal({ lgwidth, mobileWidth, open, action, onOpenChange, selectedPost, handleSuccess, handleError }: {
+export default function DeleteConfirmationModal({ lgwidth, mobileWidth, onOpenChange, selectedPost, handleSuccess, handleError }: {
     lgwidth: string; mobileWidth: string; action: string; open: boolean; onOpenChange: (value: boolean) => void, selectedPost: {
-        selectedPostsData: IPost
+        selectedPostsData: IPost | null
     }, handleSuccess: (data: IPost) => void; handleError: (error: Error) => void;
 }) {
 
-    const [formData, setFormData] = useState(selectedPost?.selectedPostsData);
+    const [formData] = useState(selectedPost?.selectedPostsData);
 
     const [updatingData, setUpdatingData] = useState(false);
-
-    const handleDeletePost = useCallback(async () => {
-        const payload = { ...formData };
-        console.log("Payload", payload);
-        setUpdatingData(true);
-        await DeletePostHandler(payload)
-        setUpdatingData(false);
-    }, [formData, action])
 
     const { mutateAsync: DeletePostHandler } = useMutation({
         mutationFn: deletePost,
         onSuccess: (data: IPost) => {
-            console.log('ehere');
             handleSuccess(data);
         },
         onError: (error: Error) => {
             handleError(error);
         }
     })
+    const handleDeletePost = useCallback(async () => {
+        const payload = { ...formData };
+        const {id} = payload;
+        setUpdatingData(true);
+        if(id)
+        {
+        await DeletePostHandler(id)
+        }
+        setUpdatingData(false);
+    }, [formData,DeletePostHandler])
     return (
         <Dialog open onOpenChange={onOpenChange}>
             <DialogContent className={`${mobileWidth} ${lgwidth} bg-slate-200 dark:bg-slate-700 h-fit`}>

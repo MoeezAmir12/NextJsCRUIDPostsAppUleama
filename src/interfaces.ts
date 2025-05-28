@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 
 
 export interface IDarkModePlugin {
@@ -7,8 +8,13 @@ export interface IDarkModePlugin {
   }
   
 export interface IPost {
-userId: number | null;
-id: number | null ;
+userId: number | null ;
+id?: number | undefined | null;
 title: string;
 body: string;
 }  
+
+
+export interface IQueryClientProviderWrapper {
+    children: ReactNode
+}
