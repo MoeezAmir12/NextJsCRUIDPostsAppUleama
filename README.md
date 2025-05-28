@@ -49,11 +49,11 @@ Icons – SVGs and Centralized and customizable icon components using Lucide.
 
 Route Paths:
 
-1: localhost:3000/ = posts page (ISR) Server-side.
+1: / = posts page (ISR) Server-side.
 
-2: localhost:3000/posts/[id] = selected post detail page (ISR) with generate Static Params Server-side.
+2: /posts/[id] = selected post detail page (ISR) with generate Static Params Server-side.
 
-3: localhost:3000/admin = client side page with React=Query performing CRUID operations.
+3: /admin = client side page with React=Query performing CRUID operations.
 
 ## Getting Started
 
