@@ -5,15 +5,20 @@ Project Overview:
 This project is built with the latest version of Next.js and follows best practices for performance, maintainability, and modern frontend development. It utilizes Incremental Static Regeneration (ISR), dynamic route generation, and client-side interactivity with React Query for data-fetching and mutations for performing cruid operations on Admin Page.
 
 🧱 Features
+
 ✅ Static & Server-Side Rendering
 /posts Page
+
 Statically generated Posts Page using ISR for optimized performance to refetch after 1min for latest posts.  Displays a list of blog posts.
 
 /post/[id] Page
+
 Statically generated posts pages according to thier IDs at build time using generateStaticParams() and Dynamically generated using Next.js Incremental Static Regeneration. Each post page is statically generated at request time and cached for future visits. after 1 min, data is refetched using ISR to get latest post detail for the provided postID.
 
 ✅ Client-Side Admin Interface
+
 /admin Page
+
 A fully client-side page built as a React component.
 
 Uses React Query for data fetching and mutations.
@@ -25,6 +30,7 @@ have perforeed query inavlidating to refetch data from backend, but data doesnot
 Optimistic updates and responsive user experience.
 
 UI/UX & Styling
+
 Dark Mode toggle supported with class dark added.
 
 Fully responsive design, mobile and tablet friendly.
@@ -42,8 +48,11 @@ DarkModeToggle – Switch between light and dark themes.
 Icons – SVGs and Centralized and customizable icon components using Lucide.
 
 Route Paths:
+
 1: localhost:3000/ = posts page (ISR) Server-side.
+
 2: localhost:3000/posts/[id] = selected post detail page (ISR) with generate Static Params Server-side.
+
 3: localhost:3000/admin = client side page with React=Query performing CRUID operations.
 
 ## Getting Started
