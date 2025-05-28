@@ -1,28 +1,26 @@
 "use client";
 
-
-import { JsonPlaceHolderAPIEnum } from "@/Enums";
 import type { IPost } from "@/interfaces";
 import { fetchPosts } from "@/Reducers/postsAPIReducer";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
 import { Skeleton } from "@/Components/ui/skeleton";
 import { Button } from "@/Components/ui/button";
-import PlusIconSVG from "@/Components/Icons/PlusIconSVG";
 import { toast, Toaster } from "sonner";
 import CreateEditPostModal from "@/Components/CreateEditPostModal/CreateEditPostModal";
 import DeleteConfirmationModal from "@/Components/DeleteModal/DeleteModal";
 import DataTablePosts from "./dataTablePosts";
+import { PlusIcon } from "lucide-react";
 
-export default async function AdminPage() {
+export default function AdminPage() {
   // React-Query is being used here for mutations, data-fetching from API
   // using query client to perform data-fetching again based on invalidating queries
   const client = useQueryClient();
   // state management for admin page
-  const [popupModalPost,setPopupModalPost] = useState<{isOpen: boolean; action: string; selectedPostData: IPost | null}>({
+  const [popupModalPost,setPopupModalPost] = useState<{isOpen: boolean; action: string; selectedPostsData: IPost | null}>({
     isOpen: false,
     action: '',
-    selectedPostData: null
+    selectedPostsData: null
   });
   const [postData,setPostData] = useState<null | undefined | IPost[]>([]);
   // function to return short post body
@@ -37,12 +35,12 @@ export default async function AdminPage() {
     return body;
   }
   }
-
+  console.log('popupModal',popupModalPost);
   const handleCreateNewPost = useCallback(() => {
   setPopupModalPost({
     isOpen: true,
   action: 'createPost',
-  selectedPostData: null
+  selectedPostsData: null
   })
   },[])
 
@@ -52,6 +50,7 @@ export default async function AdminPage() {
         toast.success('Post Created!');
         await client.invalidateQueries({queryKey: ['refetch-post']});
         const newData = [...postData,data];
+        console.log('new Data',newData);
         setPostData(newData);
 
     }
@@ -60,7 +59,7 @@ export default async function AdminPage() {
         toast.success('Post Updated!');
         await client.invalidateQueries({queryKey: ['refetch-post']});
         const copyPostsArr = [...postData];
-        const indexToUpdate = postData?.findIndex(ind => ind?.id === popupModalPost?.selectedPostData?.id);
+        const indexToUpdate = postData?.findIndex(ind => ind?.id === popupModalPost?.selectedPostsData?.id);
         copyPostsArr[indexToUpdate] = data;
         setPostData(copyPostsArr);
     }
@@ -68,13 +67,14 @@ export default async function AdminPage() {
     {
         toast.success('Post Deleted!');
         await client.invalidateQueries({queryKey: ['refetch-post']});
-        const copyPostsArr = postData?.filter(post => post?.id !== popupModalPost?.selectedPostData?.id);
+        const copyPostsArr = postData?.filter(post => post?.id !== popupModalPost?.selectedPostsData?.id);
+        console.log('data',copyPostsArr);
         setPostData(copyPostsArr);
     }
     setPopupModalPost({
         isOpen: false,
         action: '',
-        selectedPostData: null
+        selectedPostsData: null
     })
   }
 
@@ -92,6 +92,7 @@ refetchInterval: 60000
   })
  useEffect(() => {
     // handling error on data-fetching
+    console.log("postsData",postsData);
     setPostData(postsData)
  if(isError)
  {
@@ -99,23 +100,25 @@ refetchInterval: 60000
  }
  },[isError,postsData]) 
   return (
-  <div className="w-full h-full flex flex-col gap-4 dark:bg-black">
+  <div className="w-full h-full flex flex-col gap-4 bg-slate-200 dark:bg-black">
     <div className="flex w-full p-2 flex-row">
-  <h2 className="text-xl font-bold text-slate-800 dark:text-slate-50 text-center">Admin Page</h2>
-  <div className="w-full flex flex-row justify-end">
-<Button size={"icon"} variant={"outline"} className="outline-2 outline-blue-400" onClick={handleCreateNewPost}><PlusIconSVG color="#E0F2FE"/> Create Post</Button>
+  <h2 className="text-xl font-bold text-slate-800 dark:text-slate-50 text-center w-full">Admin Page</h2>
+  <div className="flex flex-row justify-end">
+<Button color="#ADD8E6" className="bg-slate-600 dark:bg-blue-200 border-2 border-[#3B82F6] hover:shadow-[0_0_10px_3px_rgba(59,130,246,0.7)] transition-shadow duration-300" onClick={handleCreateNewPost}><PlusIcon color="#3B82F6"size={50}/> Create Post</Button>
 </div>
     </div>
-  <div className="lg:w-[30%] flex flex-col gap-2 w-[50%]">
+  <div className="w-full h-screen bg-slate-200">
     {postsLoading === true && <Skeleton className="w-[100px] h-[20px] rounded-full" />}
   {Array.isArray(postData) && postsLoading === false && postData?.length > 0 && <DataTablePosts postData={postData} setPopupModalValues={setPopupModalPost}/>}
   </div>
-  {popupModalPost?.isOpen === true && (popupModalPost?.action === 'editPost' || popupModalPost?.action === 'createPost') && <CreateEditPostModal handleSuccess={handleSuccessPost} handleError={handleErrorPost} action={popupModalPost?.action} open={popupModalPost?.isOpen} lgwidth="14rem" mobileWidth="8rem" onOpenChange={() => setPopupModalPost({isOpen: false,
+  {popupModalPost?.isOpen === true && (popupModalPost?.action === 'editPost' || popupModalPost?.action === 'createPost' || popupModalPost?.action === 'viewPost') && <CreateEditPostModal handleSuccess={handleSuccessPost} handleError={handleErrorPost} action={popupModalPost?.action} open={popupModalPost?.isOpen} lgwidth="14rem" mobileWidth="8rem" onOpenChange={() => {setPopupModalPost({isOpen: false,
     action: '',
-    selectedPostData: null})} selectedPostData={popupModalPost?.selectedPostData}/>}
+    selectedPostsData: null})
+    console.log('clicked');
+    }} selectedPost={popupModalPost}/>}
   {popupModalPost?.isOpen === true && popupModalPost?.action === 'deletePost' && <DeleteConfirmationModal handleSuccess={handleSuccessPost} handleError={handleErrorPost} action={popupModalPost?.action} open={popupModalPost?.isOpen} lgwidth="14rem" mobileWidth="8rem" onOpenChange={() => setPopupModalPost({isOpen: false,
     action: '',
-    selectedPostData: null})} selectedPostData={ popupModalPost?.selectedPostData} />}
+    selectedPostsData: null})} selectedPost={ popupModalPost} />}
   <Toaster duration={5000} />
   </div>
   );

@@ -30,7 +30,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ReactQueryProvider>
-          <div className="w-[100dvh] h-[100dvh] p-2">
+          <div className="w-screen h-screen p-2 flex flex-col gap-2 bg-slate-200 dark:bg-black">
         <Navbar/>
         {children}
         </div>
